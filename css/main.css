@@ -90,6 +90,7 @@ li {
 
 h1, h2, h3, h4, h5, h6 {
   text-transform: uppercase;
+  letter-spacing: 2px;
   width: 100%;
   -webkit-transition-delay: 1s;
           transition-delay: 1s; }
@@ -327,6 +328,9 @@ button, .btn {
 .hidebig {
   z-index: 1000; }
 
+.contact li {
+  min-width: 50%; }
+
 @media only screen and (min-width: 1101px) {
   .hidebig {
     display: none; }
@@ -447,6 +451,6 @@ button:hover {
 button.bad:hover {
   background-color: #ae2727 !important; }
 
-.btn, .darken, .imgcontain, .hidesmall, button, h1, h2, h3, h4, h5, h6 {
+.btn, .darken, .imgcontain, .hidesmall, button, h1, h2, h3, h4, h5, h6, li.info p {
   -webkit-transition: .3s ease-in-out;
   transition: .3s ease-in-out; }
