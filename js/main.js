@@ -1,204 +1,168 @@
+//----------------------------------------------------------------------------------------------------------------------
+//FONCTIONS CONTENU HTML
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+//lien 'ajouter au panier'
+$(".containeritems:not(.cart) ul li .imgcontain").append('<a class="btn" href="#">Ajouter au panier</a>');
 
-(function ($) {
-    "use strict";
+//----------------------------------------------------------------------------------------------------------------------
+//Vérification champs avec formule originale
+function formiscomplet(element) {
+  let email = element.siblings("input[type=email]").val();
+  let password = element.siblings("input[type=password]").val();
+  return /^\S{4,}@\S{4,}\.\S{2,}$/.test(email) && /^\S{8,}$/.test(password);
+}
 
-    /*[ Load page ]
-    ===========================================================*/
-    $(".animsition").animsition({
-        inClass: 'fade-in',
-        outClass: 'fade-out',
-        inDuration: 1500,
-        outDuration: 800,
-        linkElement: '.animsition-link',
-        loading: true,
-        loadingParentElement: 'html',
-        loadingClass: 'animsition-loading-1',
-        loadingInner: '<div data-loader="ball-scale"></div>',
-        timeout: false,
-        timeoutCountdown: 5000,
-        onLoadEvent: true,
-        browser: [ 'animation-duration', '-webkit-animation-duration'],
-        overlay : false,
-        overlayClass : 'animsition-overlay-slide',
-        overlayParentElement : 'html',
-        transition: function(url){ window.location.href = url; }
-    });
-    
-    /*[ Back to top ]
-    ===========================================================*/
-    var windowH = $(window).height()/2;
+//----------------------------------------------------------------------------------------------------------------------
+//+/- dans le panier
+$("#cart ul li:not(.checkout)").append('<p class="stretch"></p><button class="btn minus">-</button><p class="qty">1</p><button class="btn plus">+</button><button class="btn">Supprimer</button>');
+$(".minus").click( function () {
+	let nombre = $(this).next().text();
+	nombre == 1 ? nombre : nombre--;
+ $(this).next().text(nombre);
+});
+$(".plus").click( function () {
+	let nombre = $(this).prev().text();
+	nombre == 15 ? alert("Veuillez contacter pour faire des commandes en vrac") : nombre++;
+ $(this).prev().text(nombre);
+});
 
-    $(window).on('scroll',function(){
-        if ($(this).scrollTop() > windowH) {
-            $("#myBtn").css('display','flex');
-        } else {
-            $("#myBtn").css('display','none');
-        }
-    });
+$(".product ul li:nth-child(2)").append('<div class="prodcontrol"></p><button class="btn minus">-</button><p class="qty">1</p><button class="btn plus">+</button><button class="btn">Ajouter au panier</button>');
 
-    $('#myBtn').on("click", function(){
-        $('html, body').animate({scrollTop: 0}, 300);
-    });
+//----------------------------------------------------------------------------------------------------------------------
+//Confirmation formulaire
+function success() {
+  $(".containeritems ul li").append('<h4 class="primary">Le formulaire a bien été envoyé et recu!</h4>');
+};
+function fail() {
+  $(".containeritems ul li").append("<h4 class='danger'>Erreur lors de l'envoi, veuillez réessayer</h4>'");
+};
 
+//----------------------------------------------------------------------------------------------------------------------
+//ANIMATIONS HOVER
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+//texte de la navigation droite
+const $primary = "#27aeae"
+$("nav ul li.r").hover(function() {
+  $(this).stop( true, true ).animate({
+  color: $primary
+  }, 300, "swing");
+}, function() {
+  $(this).stop( true, true ).animate({
+    color: "#000000"
+  }, 300, "swing");
+});
 
-    /*[ Show header dropdown ]
-    ===========================================================*/
-    $('.js-show-header-dropdown').on('click', function(){
-        $(this).parent().find('.header-dropdown')
-    });
+//----------------------------------------------------------------------------------------------------------------------
+//background de la navigation centrale
+$("nav ul li:not(.r):not(.active) a:not(.logo)").css("backgroundColor", "#eeeeee");
+$("nav ul li:not(.r):not(.active) a:not(.logo)").hover(function() {
+  $(this).stop( true, true ).animate({
+  backgroundColor: "#dddddd"
+  }, 300, "swing");
+}, function() {
+  $(this).stop( true, true ).animate({
+    backgroundColor: "#eeeeee"
+  }, 300, "swing");
+});
 
-    var menu = $('.js-show-header-dropdown');
-    var sub_menu_is_showed = -1;
+//----------------------------------------------------------------------------------------------------------------------
+//Grossisement de l'image
+$(".containeritems:not(.cart) ul li .imgcontain, #catwrap .imgcontain").wrap( function() {
+  $(this).wrap("<a class='container' href='" + $(this).attr("href") + "'></a>")
+});
+$(".containeritems:not(.cart) ul li .imgcontain a.btn, #catwrap .container .imgcontain p").wrap("<div class='darken'></div>");
+$(".containeritems:not(.cart) ul li .imgcontain, #catwrap .imgcontain").hover(function() {
+  $(this).stop( true, true ).animate({
+    width: "+=20px",
+    height: "+=20px",
+    margin: "-=10px"
+  }, 300, "swing").children(":first").stop( true, true ).animate({
+    backgroundColor: "rgba(0, 0, 0, 0.3)"
+  }, 300, "swing").children(":first").stop( true, true ).animate({
+    marginBottom: "20px"
+  }, 300, "swing");
+}, function() {
+  $(this).stop( true, true ).animate({
+    width: "-=20px",
+    height: "-=20px",
+    margin: "+=10px"
+  }, 300, "swing").children(":first").stop( true, true ).animate({
+    backgroundColor: "rgba(0, 0, 0, 0)"
+  }, 300, "swing").children(":first").stop( true, true ).animate({
+    marginBottom: "-80px"
+  }, 500, "swing");
+});
 
-    for(var i=0; i<menu.length; i++){
-        $(menu[i]).on('click', function(){ 
-            
-                if(jQuery.inArray( this, menu ) == sub_menu_is_showed){
-                    $(this).parent().find('.header-dropdown').toggleClass('show-header-dropdown');
-                    sub_menu_is_showed = -1;
-                }
-                else {
-                    for (var i = 0; i < menu.length; i++) {
-                        $(menu[i]).parent().find('.header-dropdown').removeClass("show-header-dropdown");
-                    }
+//----------------------------------------------------------------------------------------------------------------------
+//background de lien style boutons
+$(".btn").css("backgroundColor", "#000000");
+$(".btn").hover(function() {
+  $(this).stop( true, true ).animate({
+  backgroundColor: $primary
+  }, 300, "swing");
+}, function() {
+  $(this).stop( true, true ).animate({
+    backgroundColor: "#000000"
+  }, 300, "swing");
+});
 
-                    $(this).parent().find('.header-dropdown').toggleClass('show-header-dropdown');
-                    sub_menu_is_showed = jQuery.inArray( this, menu );
-                }
-        });
-    }
+//----------------------------------------------------------------------------------------------------------------------
+//background de boutons formulaires
+//rouge si formulaire n'est pas complet, primaryColor si le formulaire est complet
+$("form button").css("backgroundColor", "#000000");
+$("form button").hover(function() {
+  if (formiscomplet($(this))) {
+    $(this).stop( true, true ).animate({
+      backgroundColor: $primary
+    }, 300, "swing");
+  } else {
+    $(this).stop( true, true ).animate({
+      backgroundColor: "#ae2727"
+    }, 300, "swing");
+  }
+}, function() {
+  $(this).stop( true, true ).animate({
+    backgroundColor: "#000000"
+  }, 300, "swing");
+});
 
-    $(".js-show-header-dropdown, .header-dropdown").click(function(event){
-        event.stopPropagation();
-    });
+//----------------------------------------------------------------------------------------------------------------------
+//AUTRES ANIMATIONS
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+//Animation et showing de paragraphe au clic d'un titre (info.html)
+$("li.info p:not(.shown)").css("display", "none");
+$("li.info h4").click(function() {
+  if ($(this).next().css("display") == "none")
+  {
+    $(this).next().slideDown();
+  } else {
+    $(this).next().slideUp();
+  }
+});
 
-    $(window).on("click", function(){
-        for (var i = 0; i < menu.length; i++) {
-            $(menu[i]).parent().find('.header-dropdown').removeClass("show-header-dropdown");
-        }
-        sub_menu_is_showed = -1;
-    });
+//----------------------------------------------------------------------------------------------------------------------
+//Animation des titres
+$("h1, h2, h3, h4, h5, h6").css("width", "0%")
+$("h1, h2, h3, h4, h5, h6").animate({
+  width: "100%"
+});
 
+//----------------------------------------------------------------------------------------------------------------------
+//Animation du menu mobile
+function extendsmallnavigation() {
+  if($("ul.hidesmall").css("display") == "none") {
+    $("ul.hidesmall").slideDown();
+  } else {
+    $("ul.hidesmall").slideUp();
+  }
+}
 
-     /*[ Fixed Header ]
-    ===========================================================*/
-    var posWrapHeader = $('.topbar').height();
-    var header = $('.container-menu-header');
-
-    $(window).on('scroll',function(){
-
-        if($(this).scrollTop() >= posWrapHeader) {
-            $('.header1').addClass('fixed-header');
-            $(header).css('top',-posWrapHeader); 
-
-        }  
-        else {
-            var x = - $(this).scrollTop(); 
-            $(header).css('top',x); 
-            $('.header1').removeClass('fixed-header');
-        } 
-
-        if($(this).scrollTop() >= 200 && $(window).width() > 992) {
-            $('.fixed-header2').addClass('show-fixed-header2');
-            $('.header2').css('visibility','hidden'); 
-            $('.header2').find('.header-dropdown').removeClass("show-header-dropdown");
-            
-        }  
-        else {
-            $('.fixed-header2').removeClass('show-fixed-header2');
-            $('.header2').css('visibility','visible'); 
-            $('.fixed-header2').find('.header-dropdown').removeClass("show-header-dropdown");
-        } 
-
-    });
-    
-    /*[ Show menu mobile ]
-    ===========================================================*/
-    $('.btn-show-menu-mobile').on('click', function(){
-        $(this).toggleClass('is-active');
-        $('.wrap-side-menu').slideToggle();
-    });
-
-    var arrowMainMenu = $('.arrow-main-menu');
-
-    for(var i=0; i<arrowMainMenu.length; i++){
-        $(arrowMainMenu[i]).on('click', function(){
-            $(this).parent().find('.sub-menu').slideToggle();
-            $(this).toggleClass('turn-arrow');
-        })
-    }
-
-    $(window).resize(function(){
-        if($(window).width() >= 992){
-            if($('.wrap-side-menu').css('display') == 'block'){
-                $('.wrap-side-menu').css('display','none');
-                $('.btn-show-menu-mobile').toggleClass('is-active');
-            }
-            if($('.sub-menu').css('display') == 'block'){
-                $('.sub-menu').css('display','none');
-                $('.arrow-main-menu').removeClass('turn-arrow');
-            }
-        }
-    });
-
-
-    /*[ remove top noti ]
-    ===========================================================*/
-    $('.btn-romove-top-noti').on('click', function(){
-        $(this).parent().remove();
-    })
-
-
-    /*[ Block2 button wishlist ]
-    ===========================================================*/
-    $('.block2-btn-addwishlist').on('click', function(e){
-        e.preventDefault();
-        $(this).addClass('block2-btn-towishlist');
-        $(this).removeClass('block2-btn-addwishlist');
-        $(this).off('click');
-    });
-
-    /*[ +/- num product ]
-    ===========================================================*/
-    $('.btn-num-product-down').on('click', function(e){
-        e.preventDefault();
-        var numProduct = Number($(this).next().val());
-        if(numProduct > 1) $(this).next().val(numProduct - 1);
-    });
-
-    $('.btn-num-product-up').on('click', function(e){
-        e.preventDefault();
-        var numProduct = Number($(this).prev().val());
-        $(this).prev().val(numProduct + 1);
-    });
-
-
-    /*[ Show content Product detail ]
-    ===========================================================*/
-    $('.active-dropdown-content .js-toggle-dropdown-content').toggleClass('show-dropdown-content');
-    $('.active-dropdown-content .dropdown-content').slideToggle('fast');
-
-    $('.js-toggle-dropdown-content').on('click', function(){
-        $(this).toggleClass('show-dropdown-content');
-        $(this).parent().find('.dropdown-content').slideToggle('fast');
-    });
-
-
-    /*[ Play video 01]
-    ===========================================================*/
-    var srcOld = $('.video-mo-01').children('iframe').attr('src');
-
-    $('[data-target="#modal-video-01"]').on('click',function(){
-        $('.video-mo-01').children('iframe')[0].src += "&autoplay=1";
-
-        setTimeout(function(){
-            $('.video-mo-01').css('opacity','1');
-        },300);      
-    });
-
-    $('[data-dismiss="modal"]').on('click',function(){
-        $('.video-mo-01').children('iframe')[0].src = srcOld;
-        $('.video-mo-01').css('opacity','0');
-    });
-
-})(jQuery);
+//----------------------------------------------------------------------------------------------------------------------
+//FadeIn de la page
+$("*:not(.darken)").css("opacity", 0);
+$("*:not(.darken)").animate({
+  opacity: 1
+}, 1500);
